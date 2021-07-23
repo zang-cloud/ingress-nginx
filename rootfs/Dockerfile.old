@@ -1,5 +1,3 @@
-# This is a simplified Dockerfile used by GCP CloudBuild
-
 # Copyright 2015 The Kubernetes Authors. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubernetes-ingress-controller/nginx-amd64:0.45
+FROM BASEIMAGE
 
+CROSS_BUILD_COPY qemu-QEMUARCH-static /usr/bin/
 
 RUN clean-install \
   diffutils \
@@ -27,7 +26,6 @@ RUN mkdir -p /var/log/nginx \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log
 
-COPY ./lua/* /usr/local/lib/lua/
 COPY . /
 
 ENTRYPOINT ["/usr/bin/dumb-init"]
