@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.18.0
+FROM quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.16.0
 
 
 RUN clean-install \
