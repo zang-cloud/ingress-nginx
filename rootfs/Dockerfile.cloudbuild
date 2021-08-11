@@ -14,12 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM k8s.gcr.io/ingress-nginx/controller:v0.48.1@sha256:e9fb216ace49dfa4a5983b183067e97496e7a8b307d2093f4278cd550c303899
+FROM quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.19.0
 
 
-# RUN clean-install \
-#   diffutils \
-#   dumb-init
+RUN clean-install \
+  diffutils \
+  dumb-init
 
 # Create symlinks to redirect nginx logs to stdout and stderr docker log collector
 # This only works if nginx is started with CMD or ENTRYPOINT
@@ -30,6 +30,6 @@ RUN mkdir -p /var/log/nginx \
 COPY ./lua/* /usr/local/lib/lua/
 COPY . /
 
-# ENTRYPOINT ["/usr/bin/dumb-init"]
+ENTRYPOINT ["/usr/bin/dumb-init"]
 
-# CMD ["/nginx-ingress-controller"]
+CMD ["/nginx-ingress-controller"]
