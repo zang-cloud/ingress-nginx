@@ -12,6 +12,8 @@ if not c then
     return error("failed to create the cache: " .. (err or "unknown"))
 end
 
+local forbidden_access_message = 'account service-type not allowed to access the requested path'
+
 
 function _M.go()
     local is_authorized = c:get(ngx.var.request_uri)
@@ -20,7 +22,7 @@ function _M.go()
         return
     elseif is_authorized == false then
         ngx.status = ngx.HTTP_FORBIDDEN
-        ngx.say('Account service-type not allowed to access the requested path')
+        ngx.say(forbidden_access_message)
         ngx.exit(ngx.HTTP_FORBIDDEN)
         return
     end
@@ -30,10 +32,12 @@ function _M.go()
     if res.status == ngx.HTTP_FORBIDDEN then
       c:set(ngx.var.request_uri, false, cache_ttl_seconds)
       ngx.status = res.status
-      ngx.say('Account service-type not allowed to access the requested path')
+      ngx.say(forbidden_access_message)
       ngx.exit(res.status)
     elseif res.status == ngx.HTTP_OK then
       c:set(ngx.var.request_uri, false, cache_ttl_seconds)
+    else
+      ngx.log(ngx.WARN, 'failed to validate path ' .. ngx.var.request_uri .. ' response code ' .. res.status)
     end
 end
 
