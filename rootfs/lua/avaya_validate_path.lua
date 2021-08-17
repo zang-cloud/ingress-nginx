@@ -35,7 +35,7 @@ function _M.go()
       ngx.say(forbidden_access_message)
       ngx.exit(res.status)
     elseif res.status == ngx.HTTP_OK then
-      c:set(ngx.var.request_uri, false, cache_ttl_seconds)
+      c:set(ngx.var.request_uri, true, cache_ttl_seconds)
     else
       ngx.log(ngx.WARN, 'failed to validate path ' .. ngx.var.request_uri .. ' response code ' .. res.status)
     end
